@@ -1,0 +1,1 @@
+http://172.16.0.71:8081/talkplatform_idgenerator_consumer/genId?keyName=stu_point.id

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>测试用例管理工具</title>
+</head>
+<body onkeydown="enterClick(event.keyCode)">
+
+<script>
+    function enterClick(keyCode) {
+        if (keyCode == 13) {
+            var btn=document.getElementById('login');
+            btn.click()
+        }
+    }
+</script>
+<div id="info" style="border:3px solid #CCC;padding:4px;margin-left:30%;margin-right:50%;margin-top:10%">
+    <p>测试用例管理系统</p>
+    <form method="post" action="login.jsp">
+        <input type="text" name="username"/><br>
+        <input type="password" name="password"/><br>
+        <input id="login" type="submit" value="登陆">
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>测试结果：</title>
+<script language=javascript>
+function getCookie(name){  
+    //cookie中的数据都是以分号加空格区分开  
+    var arr = document.cookie.split("; ");  
+    for(var i=0; i<arr.length; i++){  
+        if(arr[i].split("=")[0] == name){  
+            return arr[i].split("=")[1];  
+        }
+    }
+    //未找到对应的cookie则返回空字符串  
+    return '';  
+}
+    
+window.onload=function()
+{
+	alert(getCookie("result"))
+}
+</script>
+</head>
+<body>
+
+</body>
+</html>

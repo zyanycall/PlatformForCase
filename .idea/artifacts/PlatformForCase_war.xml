@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="PlatformForCase:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="PlatformForCase.war">
+      <element id="artifact" artifact-name="PlatformForCase:war exploded" />
+    </root>
+  </artifact>
+</component>
