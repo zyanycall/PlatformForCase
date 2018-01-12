@@ -38,7 +38,7 @@ public class HttpMethodFactory {
             case "delete":
                 result = DeleteMethod.sendDelete(url, bodyinfo);
                 break;
-            default:
+            default://一键边界测试进默认方法
                 result = sendRequest(method, url, bodyinfo);
                 break;
         }

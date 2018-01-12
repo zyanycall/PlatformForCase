@@ -60,6 +60,7 @@ public class JSONBorderParam extends BorderParam {
             String valueOriginal = jsonObj.getString(oneKey);
 
             // 如何replay 是关键。
+            // 复用了不同类型参数化的方法。
             BorderParam borderParam = BorderCheckUtil.getBorderParamType(
                     oneKey + "=" + valueOriginal, oneKey, valueOriginal, LONG_PARAM_NO_NEED_CHECK);
             for (String paramPairFix : borderParam.getParamList()) {

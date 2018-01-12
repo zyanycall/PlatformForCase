@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.LinkedHashSet;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 /**
@@ -22,6 +23,7 @@ public class BorderCheckUtil {
     private final static int PARAM_TOO_LONG_300 = 300;
     private final static int PARAM_TOO_LONG_600 = 600;
     private final static String HTML_INTERVAL_2BR = "<br><br>";
+    private final static int RESULT_TOO_LONG_2000 = 2000;
 
     /**
      * 共有常量
@@ -53,18 +55,24 @@ public class BorderCheckUtil {
         StringBuilder resultSb = new StringBuilder();
         // 各种错误返回，剔除重复的。
         StringBuilder errorResultSb = new StringBuilder();
+        // 如果遇到http访问异常，参数的信息。
+        StringBuilder exceptionResultSb = new StringBuilder();
+
+        // 如果遇到超长的异常信息如SQL异常，生成异常提示集合避免重复导致字段过长页面显示失败
+        TreeMap<String, String> tooLongResultMap = new TreeMap<>();
+        int tooLongResultCount = 0;
 
         String params[] = bodyinfo.split("&");
         int correctParamsCount = params.length;
         int realParamsCount = 0;
         int testCount = 0;
         for (String paramPair : params) {
-            // 由于数据比较规整，所以直接split方法，或者每一个参数的键值对
-            try {
-                // 参数值获取
-                String key = paramPair.split("=")[0];
-                String value = getParamValue(paramPair);
 
+            // 由于数据比较规整，所以直接split方法，或者每一个参数的键值对
+            // 参数值获取
+            String key = paramPair.split("=")[0];
+            String value = getParamValue(paramPair);
+            try {
                 BorderParam borderParam = getBorderParamType(paramPair, key, value, BorderParam.LONG_PARAM_NEED_CHECK);
 
                 // 测试了多少个参数（由于肯定会走到这里，这个计数仅用作结果展示）
@@ -82,6 +90,16 @@ public class BorderCheckUtil {
                     String result = HttpMethodFactory.getResult(method, url, bodyinfoFix);
 
                     if (!result.contains(SUCCESS_FLAG)) {
+                        // 对超长的不得不显示的异常提示的处理
+                        if (result.length() > RESULT_TOO_LONG_2000) {
+                            if (tooLongResultMap.containsKey(result)) {
+                                result = "<a href='#" + tooLongResultMap.get(result) + "'>" + tooLongResultMap.get(result) + "</a>";
+                            } else {
+                                String tooLongResultSingle = "返回异常请直接查看：" + tooLongResultCount++;
+                                tooLongResultMap.put(result, tooLongResultSingle);
+                                result = "<a href='#" + tooLongResultSingle + "'>" + tooLongResultSingle + "</a>";
+                            }
+                        }
                         // 不同错误结果的响应
                         if (!errorResultList.contains(result)) {
                             errorResultSb.append(result).append("<br>");
@@ -114,17 +132,31 @@ public class BorderCheckUtil {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                exceptionResultSb.append(key + "<br>");
                 continue;
             }
         }
         // 拼接结果
         String resultSbStr = resultSb.toString().replaceAll("<\\\\/font>", "</font>");
 
-        return "参数的个数： " + correctParamsCount + "<br>" +
+        String returnValue = "参数的个数： " + correctParamsCount + "<br>" +
                 "边界测试的参数个数： " + realParamsCount + "<br>" +
-                "边界测试一共多少用例： " + testCount + "<br>" +
-                "边界测试集合：<br>" + errorResultSb.toString() +
+                "运行时异常：" + (exceptionResultSb.toString().isEmpty() ? "<无><br>" : HTML_POINT_RED + exceptionResultSb + HTML_POINT_SUFFIX) +
+                "边界测试用例个数： " + testCount + "<br>" +
+                "边界测试提示集合(个)：" + errorResultList.size() + " <br>" + errorResultSb.toString() +
                 "边界测试详细：<br>" + resultSbStr;
+
+        if (tooLongResultMap.size() > 0) {
+            String tooLongResult = "";
+            for (String key : tooLongResultMap.keySet()) {
+                tooLongResult += HTML_INTERVAL_2BR + HTML_POINT_RED + "<a name='" + tooLongResultMap.get(key) + "'>" +
+                        tooLongResultMap.get(key) + "</a>" + HTML_POINT_SUFFIX +
+                        HTML_INTERVAL_2BR + HTML_RESULT + key + HTML_RESULT_SUFFIX;
+            }
+            return returnValue + tooLongResult;
+        }
+        return returnValue;
+
     }
 
     /**

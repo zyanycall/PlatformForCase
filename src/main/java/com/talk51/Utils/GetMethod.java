@@ -50,14 +50,15 @@ public class GetMethod {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            e.printStackTrace(pw);
-            return sw.toString();
+//            e.printStackTrace(pw);
+            return e.getMessage();
         } finally {
             pw.close();
             try {
                 if (in != null) {
                     in.close();
                 }
+                sw.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

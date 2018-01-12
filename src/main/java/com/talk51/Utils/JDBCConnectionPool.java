@@ -33,7 +33,6 @@ public class JDBCConnectionPool {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return connection;
     }
 

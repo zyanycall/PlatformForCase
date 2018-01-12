@@ -58,8 +58,8 @@ public class PostUtil {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            e.printStackTrace(pw);
-            return sw.toString();
+//            e.printStackTrace(pw);
+            return e.getMessage();
         } finally {
             pw.close();
             try {
@@ -69,6 +69,7 @@ public class PostUtil {
                 if (in != null) {
                     in.close();
                 }
+                sw.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
