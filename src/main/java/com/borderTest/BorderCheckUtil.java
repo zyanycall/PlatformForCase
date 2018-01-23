@@ -1,5 +1,9 @@
 package com.borderTest;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.talk51.Utils.HttpMethodFactory;
 import org.apache.commons.lang.StringUtils;
 
@@ -28,11 +32,11 @@ public class BorderCheckUtil {
     /**
      * 共有常量
      */
-    public final static String HTML_RESULT = "<font color='DarkBlue'>";
-    public final static String HTML_RESULT_SUFFIX = "</font>";
+    public final static String HTML_RESULT = "<span style='white-space: pre-wrap;'><font color='DarkBlue'>";
+    public final static String HTML_RESULT_SUFFIX = "</font></span>";
     public final static String HTML_POINT_RED = "<font color='red'>";
-    public final static String HTML_POINT_GREEN = "<font color='Green'>";
-    public final static String HTML_POINT_SUFFIX = "</font>";
+    public final static String HTML_POINT_GREEN = "<span style='white-space: pre-wrap;'><font color='Green'>";
+    public final static String HTML_POINT_SUFFIX = "</font></span>";
 
     // 空字符串的提示
     public final static String HTML_EMPTY = "(实际输入为空!)";
@@ -85,9 +89,18 @@ public class BorderCheckUtil {
                     // paramPairFixClear 是真正替换原有参数值，参与http请求的。
                     String paramPairFixClear = clearFixValue(paramPairFix);
                     // 替换
-                    String bodyinfoFix = bodyinfo.replaceAll(paramPair, paramPairFixClear);
-                    // 输出结果
-                    String result = HttpMethodFactory.getResult(method, url, bodyinfoFix);
+                    String bodyinfoFix = bodyinfo.replaceAll("&" + paramPair + "&", "&" + paramPairFixClear + "&");
+                    // 输出结果(没有Json格式)
+                    String noJsonResult = HttpMethodFactory.getResult(method, url, bodyinfoFix);
+                    String result;
+
+                    try {
+                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                        JsonParser jp = new JsonParser();
+                        result = gson.toJson(jp.parse(noJsonResult));
+                    } catch (JsonSyntaxException e){
+                        result = noJsonResult;
+                    }
 
                     if (!result.contains(SUCCESS_FLAG)) {
                         // 对超长的不得不显示的异常提示的处理
@@ -95,7 +108,7 @@ public class BorderCheckUtil {
                             if (tooLongResultMap.containsKey(result)) {
                                 result = "<a href='#" + tooLongResultMap.get(result) + "'>" + tooLongResultMap.get(result) + "</a>";
                             } else {
-                                String tooLongResultSingle = "返回异常请直接查看：" + tooLongResultCount++;
+                                String tooLongResultSingle = "返回超长已做唯一化，请点击链接查看：" + tooLongResultCount++;
                                 tooLongResultMap.put(result, tooLongResultSingle);
                                 result = "<a href='#" + tooLongResultSingle + "'>" + tooLongResultSingle + "</a>";
                             }
