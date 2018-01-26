@@ -86,10 +86,15 @@ public class BorderCheckUtil {
                     // 测试了多少次
                     testCount++;
                     // paramPairFix 是包含html格式的，用于结果页html展示所用。
-                    // paramPairFixClear 是真正替换原有参数值，参与http请求的。
+                    // paramPairFixClear 是真正替换原有参数值，去掉了html格式，参与http请求的。
                     String paramPairFixClear = clearFixValue(paramPairFix);
                     // 替换
-                    String bodyinfoFix = bodyinfo.replaceAll( paramPair + "&", paramPairFixClear + "&");
+                    String bodyinfoFix = "";
+                    if (bodyinfo.endsWith(paramPair)) {
+                        bodyinfoFix = bodyinfo.replaceAll( "&" + paramPair, "&" + paramPairFixClear);
+                    } else {
+                        bodyinfoFix = bodyinfo.replaceAll( paramPair + "&", paramPairFixClear + "&");
+                    }
                     // 输出结果(没有Json格式)
                     String noJsonResult = HttpMethodFactory.getResult(method, url, bodyinfoFix);
                     String result;
