@@ -22,7 +22,7 @@ public class BorderCheckUtil {
      * 私有的常量
      */
     private final static String PAGE = "page";
-    private final static String SUCCESS_FLAG = "\"code\":\"10000\"";
+    private final static String SUCCESS_FLAG = "\"code\": \"10000\"";
     private final static int PARAM_TOO_LONG_100 = 100;
     private final static int PARAM_TOO_LONG_300 = 300;
     private final static int PARAM_TOO_LONG_600 = 600;
@@ -89,7 +89,7 @@ public class BorderCheckUtil {
                     // paramPairFixClear 是真正替换原有参数值，参与http请求的。
                     String paramPairFixClear = clearFixValue(paramPairFix);
                     // 替换
-                    String bodyinfoFix = bodyinfo.replaceAll("&" + paramPair + "&", "&" + paramPairFixClear + "&");
+                    String bodyinfoFix = bodyinfo.replaceAll( paramPair + "&", paramPairFixClear + "&");
                     // 输出结果(没有Json格式)
                     String noJsonResult = HttpMethodFactory.getResult(method, url, bodyinfoFix);
                     String result;
