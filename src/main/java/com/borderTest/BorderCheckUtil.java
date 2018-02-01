@@ -39,7 +39,7 @@ public class BorderCheckUtil {
     public final static String HTML_POINT_SUFFIX = "</font></span>";
 
     // 空字符串的提示
-    public final static String HTML_EMPTY = "(实际输入为空!)";
+    public final static String HTML_EMPTY = "实际输入为空!";
     public final static String HTML_POINT_EMPTY = HTML_POINT_RED + HTML_EMPTY + HTML_POINT_SUFFIX;
 
     // 用于随机取颜色
@@ -130,7 +130,7 @@ public class BorderCheckUtil {
                     String valueFix = getParamValue(paramPairFix);
                     String paramPairFixDecode = URLDecoder.decode(paramPairFix, "UTF-8");
                     // 定制一些特殊的返回值，返回值没有做太多的定制，因为直接返回key-value就很好
-                    if (paramPairFix == HTML_POINT_EMPTY) {
+                    if (paramPairFix.equals(HTML_POINT_EMPTY)) {
                         resultSb.append(keyDecode).append(":不传");
                     } else if (valueFix.isEmpty()) {
                         resultSb.append(paramPairFix + ":传空值");
@@ -239,19 +239,20 @@ public class BorderCheckUtil {
     }
 
     public static String clearFixValue(String valueBeforeFix) {
-        String valueFix = valueBeforeFix.replaceAll(HTML_RESULT, "")
+        String valueFix = valueBeforeFix
+                // 处理空值
+                .replaceAll(HTML_RESULT, "")
                 .replaceAll(HTML_RESULT_SUFFIX, "")
                 .replaceAll(HTML_POINT_RED, "")
                 .replaceAll(HTML_POINT_SUFFIX, "")
                 // JOSN格式会将\转换成\/，所以多一个步骤
                 .replaceAll("<\\\\/font>", "")
-                // 处理空值
-                .replaceAll(HTML_POINT_EMPTY, "");
+                .replaceAll(HTML_EMPTY, "");
         return valueFix;
     }
 
     public static void main(String[] args) {
-        System.out.println("\"\"".replaceAll("\"\"", HTML_POINT_RED + "\"(空)\"" + HTML_POINT_SUFFIX));
+        System.out.println(HTML_EMPTY.replaceAll(HTML_EMPTY,""));
     }
 
 }
