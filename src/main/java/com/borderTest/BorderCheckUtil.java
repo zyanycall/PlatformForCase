@@ -9,6 +9,8 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
@@ -38,6 +40,8 @@ public class BorderCheckUtil {
     public final static String HTML_POINT_GREEN = "<span style='white-space: pre-wrap;'><font color='Green'>";
     public final static String HTML_POINT_SUFFIX = "</font></span>";
 
+    public final static String HTML_POINT_SUFFIX_4JSON = "<\\/font><\\/span>";
+
     // 空字符串的提示
     public final static String HTML_EMPTY = "实际输入为空!";
     public final static String HTML_POINT_EMPTY = HTML_POINT_RED + HTML_EMPTY + HTML_POINT_SUFFIX;
@@ -57,6 +61,9 @@ public class BorderCheckUtil {
 
         // 每一个请求输出结果
         StringBuilder resultSb = new StringBuilder();
+        // 打印开始结束时间
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String beginTime = df.format(new Date());
         // 各种错误返回，剔除重复的。
         StringBuilder errorResultSb = new StringBuilder();
         // 如果遇到http访问异常，参数的信息。
@@ -91,9 +98,9 @@ public class BorderCheckUtil {
                     // 替换
                     String bodyinfoFix = "";
                     if (bodyinfo.endsWith(paramPair)) {
-                        bodyinfoFix = bodyinfo.replaceAll( "&" + paramPair, "&" + paramPairFixClear);
+                        bodyinfoFix = bodyinfo.replace( "&" + paramPair, "&" + paramPairFixClear);
                     } else {
-                        bodyinfoFix = bodyinfo.replaceAll( paramPair + "&", paramPairFixClear + "&");
+                        bodyinfoFix = bodyinfo.replace( paramPair + "&", paramPairFixClear + "&");
                     }
                     // 输出结果(没有Json格式)
                     String noJsonResult = HttpMethodFactory.getResult(method, url, bodyinfoFix);
@@ -154,13 +161,16 @@ public class BorderCheckUtil {
                 continue;
             }
         }
+        String endTime = df.format(new Date());
         // 拼接结果
-        String resultSbStr = resultSb.toString().replaceAll("<\\\\/font>", "</font>");
+        String resultSbStr = resultSb.toString().replace("<\\/font>", "</font>");
 
         String returnValue = "参数的个数： " + correctParamsCount + "<br>" +
                 "边界测试的参数个数： " + realParamsCount + "<br>" +
                 "运行时异常：" + (exceptionResultSb.toString().isEmpty() ? "<无><br>" : HTML_POINT_RED + exceptionResultSb + HTML_POINT_SUFFIX) +
                 "边界测试用例个数： " + testCount + "<br>" +
+                "边界测试开始时间：" + beginTime + "<br>" +
+                "边界测试结束时间：" + endTime + "<br>" +
                 "边界测试提示集合(个)：" + errorResultList.size() + " <br>" + errorResultSb.toString() +
                 "边界测试详细：<br>" + resultSbStr;
 
@@ -233,7 +243,7 @@ public class BorderCheckUtil {
             return "";
         } else {
             String key = paramPair.split("=")[0];
-            String returnValue = paramPair.replaceAll(key + "=", "");
+            String returnValue = paramPair.replace(key + "=", "");
             return returnValue;
         }
     }
@@ -241,18 +251,23 @@ public class BorderCheckUtil {
     public static String clearFixValue(String valueBeforeFix) {
         String valueFix = valueBeforeFix
                 // 处理空值
-                .replaceAll(HTML_RESULT, "")
-                .replaceAll(HTML_RESULT_SUFFIX, "")
-                .replaceAll(HTML_POINT_RED, "")
-                .replaceAll(HTML_POINT_SUFFIX, "")
-                // JOSN格式会将\转换成\/，所以多一个步骤
-                .replaceAll("<\\\\/font>", "")
-                .replaceAll(HTML_EMPTY, "");
+                .replace(HTML_RESULT, "")
+                .replace(HTML_RESULT_SUFFIX, "")
+                .replace(HTML_POINT_RED, "")
+                .replace("</font>", "")
+                .replace("</span>", "")
+                // JOSN格式会将\转换成\/，所以多几个步骤
+                .replace("<\\/font>", "")
+                .replace("<\\/span>", "")
+                .replace(HTML_EMPTY, "");
         return valueFix;
     }
 
     public static void main(String[] args) {
-        System.out.println(HTML_EMPTY.replaceAll(HTML_EMPTY,""));
+
+        System.out.println("class_info=[{\"src_class_id\":80349718,\"tar_class_id\":80350002,\"tar_class_room_id\":187202},{\"src_class_id\":80349789,\"tar_class_id\":80350073}]&stu_id=606492200&admin_id=1234444&reason=zyTest001&appkey=om_backend&timestamp=1517797971"
+                .replace("class_info=[{\"src_class_id\":80349718,\"tar_class_id\":80350002,\"tar_class_room_id\":187202},{\"src_class_id\":80349789,\"tar_class_id\":80350073}]&",
+                        "class_info=[{\"src_class_id\":\"80349718.1\",\"tar_class_id\":80350002,\"tar_class_room_id\":187202},{\"src_class_id\":80349789,\"tar_class_id\":80350073}]&"));
     }
 
 }

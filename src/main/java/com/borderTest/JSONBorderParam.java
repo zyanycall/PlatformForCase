@@ -75,10 +75,11 @@ public class JSONBorderParam extends BorderParam {
                             valueFixClear + BorderCheckUtil.HTML_POINT_SUFFIX);
                 }
                 // 已经替换关键value，可以直接调用toString方法。
-                paramPairList.add(key + "=" + jsonObjReplace);
+                paramPairList.add(key + "=" + jsonObjReplace.toString().replace(BorderCheckUtil.HTML_POINT_SUFFIX_4JSON, BorderCheckUtil.HTML_POINT_SUFFIX));
             }
             // 把数据还原
             jsonObj.replace(oneKey, valueOriginal);
         }
     }
+    
 }
