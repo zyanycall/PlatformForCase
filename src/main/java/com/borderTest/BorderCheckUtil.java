@@ -46,6 +46,9 @@ public class BorderCheckUtil {
     public final static String HTML_EMPTY = "实际输入为空!";
     public final static String HTML_POINT_EMPTY = HTML_POINT_RED + HTML_EMPTY + HTML_POINT_SUFFIX;
 
+    // key和value都不传的提示，目前只针对Json格式参数，其它都是打印结果集时替换的。
+    public final static String HTML_NO_KEY_NO_VALUE = "不传！";
+
     // 用于随机取颜色
     public final static String[] COLORS = {"red", "Blue", "Green"};
 
@@ -235,8 +238,8 @@ public class BorderCheckUtil {
      * @return value
      */
     public static String getParamValue(String paramPair) {
-        if (HTML_POINT_EMPTY.equals(paramPair)) {// 对空的标识做特殊判断
-            return HTML_EMPTY;
+        if (HTML_POINT_EMPTY.equals(paramPair)) {// 对key和value都不传的情况做判断
+            return HTML_NO_KEY_NO_VALUE;
         } else if (StringUtils.isEmpty(paramPair)
                 || !paramPair.contains("=")
                 || paramPair.split("=").length == 1) {
