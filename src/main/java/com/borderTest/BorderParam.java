@@ -1,5 +1,7 @@
 package com.borderTest;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +16,11 @@ public class BorderParam {
      */
     public final static int LONG_PARAM_NEED_CHECK = 0;
     public final static int LONG_PARAM_NO_NEED_CHECK = 1;
+
+    /**
+     * 主要用于校验入库的post请求，对一些基本的特殊字符的支持。
+     */
+    private final static String SPECIAL_CHARACTER_COMMON_US = "'\"&||@-- --<>,.{}[]\\_+^$#!~`";
 
     // 完整的一个参数段
     String paramPair = "";
@@ -51,6 +58,9 @@ public class BorderParam {
         paramPairList.add(BorderCheckUtil.HTML_POINT_EMPTY);
         // 只有key值
         paramPairList.add(key + "=" + BorderCheckUtil.HTML_POINT_EMPTY);
+        // 增加一些常规的英文特殊字符
+        paramPairList.add(paramPair + BorderCheckUtil.HTML_POINT_RED + StringEscapeUtils.escapeHtml(SPECIAL_CHARACTER_COMMON_US)
+                + BorderCheckUtil.HTML_POINT_SUFFIX);
 
         return paramPairList;
     }

@@ -196,6 +196,7 @@ public class BorderCheckUtil {
      * @param paramPair key=value 组成的字符串
      * @param key       参数的key
      * @param value     参数的值
+     * @param flag      是否需要超长参数的校验
      */
     public static BorderParam getBorderParamType(String paramPair, String key, String value, int flag) {
         // 整数类型
