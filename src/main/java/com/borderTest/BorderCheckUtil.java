@@ -105,18 +105,10 @@ public class BorderCheckUtil {
                     } else {
                         bodyinfoFix = bodyinfo.replace( paramPair + "&", paramPairFixClear + "&");
                     }
-                    // 输出结果(没有Json格式)
+                    // 输出结果(非Json格式)
                     String noJsonResult = HttpMethodFactory.getResult(method, url, bodyinfoFix);
-                    String result;
 
-                    try {
-                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                        JsonParser jp = new JsonParser();
-                        result = gson.toJson(jp.parse(noJsonResult));
-                    } catch (JsonSyntaxException e){
-                        result = noJsonResult;
-                    }
-
+                    String result = toJson(noJsonResult);
                     if (!result.contains(SUCCESS_FLAG)) {
                         // 对超长的不得不显示的异常提示的处理
                         if (result.length() > RESULT_TOO_LONG_2000) {
@@ -252,6 +244,11 @@ public class BorderCheckUtil {
         }
     }
 
+    /**
+     * 消除自定义的Html格式信息
+     * @param valueBeforeFix
+     * @return 无自定义Html格式字符串
+     */
     public static String clearFixValue(String valueBeforeFix) {
         String valueFix = valueBeforeFix
                 // 处理空值
@@ -265,6 +262,23 @@ public class BorderCheckUtil {
                 .replace("<\\/span>", "")
                 .replace(HTML_EMPTY, "");
         return valueFix;
+    }
+
+    /**
+     * 将数据Json格式化
+     * @param noJsonResult
+     * @return json format result
+     */
+    public static String toJson(String noJsonResult) {
+        String result;
+        try {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            JsonParser jp = new JsonParser();
+            result = gson.toJson(jp.parse(noJsonResult));
+        } catch (JsonSyntaxException e){
+            result = noJsonResult;
+        }
+        return result;
     }
 
     public static void main(String[] args) {

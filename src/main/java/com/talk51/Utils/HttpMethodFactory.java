@@ -61,5 +61,4 @@ public class HttpMethodFactory {
         }
         return result;
     }
-
 }

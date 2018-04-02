@@ -1,7 +1,7 @@
 package com.borderTest;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -59,8 +59,14 @@ public class BorderParam {
         // 只有key值
         paramPairList.add(key + "=" + BorderCheckUtil.HTML_POINT_EMPTY);
         // 增加一些常规的英文特殊字符
-        paramPairList.add(paramPair + BorderCheckUtil.HTML_POINT_RED + StringEscapeUtils.escapeHtml(SPECIAL_CHARACTER_COMMON_US)
-                + BorderCheckUtil.HTML_POINT_SUFFIX);
+
+        try {
+            paramPairList.add(paramPair + BorderCheckUtil.HTML_POINT_RED +
+                    URLEncoder.encode(SPECIAL_CHARACTER_COMMON_US, "UTF-8") +
+                    BorderCheckUtil.HTML_POINT_SUFFIX);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         return paramPairList;
     }

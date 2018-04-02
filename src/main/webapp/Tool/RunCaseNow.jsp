@@ -1,18 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"
-    import="com.talk51.Utils.*"
-    import="java.net.URLDecoder"
+         pageEncoding="UTF-8"
+         import="com.talk51.Utils.*"
+         import="java.net.URLDecoder"
+         import="com.borderTest.BorderCheckUtil"
 %>
 <%
-request.setCharacterEncoding("UTF-8");
-String url=URLDecoder.decode(request.getParameter("url"),"UTF-8");
-String bodyinfo=request.getParameter("bodyinfo");
-String DisBody=URLDecoder.decode(bodyinfo,"UTF-8");
-String method=request.getParameter("method");
+    request.setCharacterEncoding("UTF-8");
+    String url = URLDecoder.decode(request.getParameter("url"), "UTF-8");
+    String bodyinfo = request.getParameter("bodyinfo");
+    String DisBody = URLDecoder.decode(bodyinfo, "UTF-8");
+    String method = request.getParameter("method");
 %>
 所请求url和参数：<br>
-<%=url%>?<%=DisBody.replaceAll("&timestamp","&amp;timestamp")%><br>
+<%=url%>?<%=DisBody.replaceAll("&timestamp", "&amp;timestamp")%><br>
 所传参数明细：<br>
-<%=DisBody.replaceAll("&timestamp","&amp;timestamp")%><br>
+<%=DisBody.replaceAll("&timestamp", "&amp;timestamp")%><br>
 运行结果：<%=method%> <br>
-<%=HttpMethodFactory.getResult(method, url, bodyinfo)%>
+<%--<PRE style="font-size:16px">--%>
+<%
+    if (method.endsWith("oneKeyCheck")) {
+        out.print(HttpMethodFactory.getResult(method, url, bodyinfo));
+    } else {
+        out.print(HttpMethodFactory.getResult(method, url, bodyinfo));
+        out.print("<br><br>格式化：<br>" + BorderCheckUtil.HTML_POINT_GREEN
+                + BorderCheckUtil.toJson(HttpMethodFactory.getResult(method, url, bodyinfo)) + BorderCheckUtil.HTML_RESULT_SUFFIX);
+    }
+%>
+<%--</PRE>--%>
