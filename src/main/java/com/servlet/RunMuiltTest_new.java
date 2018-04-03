@@ -2,6 +2,7 @@ package com.servlet;
 
 import com.talk51.Utils.*;
 import net.sf.json.JSONObject;
+import okhttp3.Headers;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import javax.servlet.ServletException;
@@ -89,9 +90,8 @@ public class RunMuiltTest_new extends HttpServlet {
                         }
                         actual_result = PostMethod_Old.sendPost(testurl, dataparm);
                     } else if (method.equals("post_body")) {
-                        HashMap headersJsonMap = new HashMap();
-                        headersJsonMap.put("Content-Type", "application/json");
-                        actual_result = PostUtil.sendPost(headersJsonMap, testurl, rs.getString("body"));
+                        Headers headers = Headers.of("Content-Type", "application/json;charset=utf-8");
+                        actual_result = HttpUtils.sendPost(headers, testurl, rs.getString("body"));
                     } else if (method.equals("post_return_json")) {
                         for (String value : dataparm.values()) {
                             try {
@@ -113,7 +113,7 @@ public class RunMuiltTest_new extends HttpServlet {
                         }
                         actual_result = PutMethod_mulit.sendPut(testurl, dataparm);
                     } else if (method.equals("delete")) {
-                        actual_result = DeleteMethod.sendDelete(testurl, rs.getString("body"));
+                        actual_result = HttpUtils.sendDelete(testurl, rs.getString("body"));
                     }
                     out.println("所执行测试场景:<br>");
                     String testscr = rs.getString("scenario");

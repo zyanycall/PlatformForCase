@@ -1,8 +1,7 @@
 package com.talk51.Utils;
 
 import com.borderTest.BorderCheckUtil;
-
-import java.util.HashMap;
+import okhttp3.Headers;
 
 /**
  * 前端使用http方法的工厂类
@@ -16,27 +15,31 @@ public class HttpMethodFactory {
      */
     public static String getResult(String method, String url, String bodyinfo) {
         String result;
-        HashMap headersJsonMap = new HashMap();
+        Headers headers;
         switch (method) {
             case "get":
-                result = GetMethod.sendGet(url, bodyinfo);
+                headers = Headers.of("User-Agent",
+                        "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)");
+                result = HttpUtils.sendGet(headers, url, bodyinfo);
                 break;
             case "post":
-                result = PostUtil.sendPost(null, url, bodyinfo);
+                headers = Headers.of("User-Agent",
+                        "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)");
+                result = HttpUtils.sendPost(headers, url, bodyinfo);
                 break;
             case "post_body":
-                headersJsonMap.put("Content-Type", "application/json;charset=utf-8");
-                result = PostUtil.sendPost(headersJsonMap, url, bodyinfo);
+                headers = Headers.of("Content-Type", "application/json;charset=utf-8");
+                result = HttpUtils.sendPost(headers, url, bodyinfo);
                 break;
             case "post_return_json":
-                headersJsonMap.put("accept", "application/json");
-                result = PostUtil.sendPost(headersJsonMap, url, bodyinfo);
+                headers = Headers.of("accept", "application/json;charset=utf-8");
+                result = HttpUtils.sendPost(headers, url, bodyinfo);
                 break;
             case "put":
-                result = PutMethod.sendPut(url, bodyinfo);
+                result = HttpUtils.sendPut(url, bodyinfo);
                 break;
             case "delete":
-                result = DeleteMethod.sendDelete(url, bodyinfo);
+                result = HttpUtils.sendDelete(url, bodyinfo);
                 break;
             default://一键边界测试进默认方法
                 result = sendRequest(method, url, bodyinfo);
