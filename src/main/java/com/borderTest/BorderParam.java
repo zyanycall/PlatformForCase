@@ -16,6 +16,8 @@ public class BorderParam {
      */
     public final static int LONG_PARAM_NEED_CHECK = 0;
     public final static int LONG_PARAM_NO_NEED_CHECK = 1;
+    public final static String booleanTrue = "true";
+    public final static String booleanFalse = "false";
 
     /**
      * 主要用于校验入库的post请求，对一些基本的特殊字符的支持。
@@ -58,8 +60,16 @@ public class BorderParam {
         paramPairList.add(BorderCheckUtil.HTML_POINT_EMPTY);
         // 只有key值
         paramPairList.add(key + "=" + BorderCheckUtil.HTML_POINT_EMPTY);
-        // 增加一些常规的英文特殊字符
 
+        // 如果是true/false
+        if (value.equalsIgnoreCase(booleanTrue)) {
+            paramPairList.add(key + "=" + booleanFalse);
+        }
+        if (value.equalsIgnoreCase(booleanFalse)) {
+            paramPairList.add(key + "=" + booleanTrue);
+        }
+
+        // 增加一些常规的英文特殊字符
         try {
             paramPairList.add(paramPair + BorderCheckUtil.HTML_POINT_RED +
                     URLEncoder.encode(SPECIAL_CHARACTER_COMMON_US, "UTF-8") +

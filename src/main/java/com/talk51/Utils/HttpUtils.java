@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class HttpUtils {
 
-    private static class Singleton{
+    private static class Singleton {
         private static OkHttpClient client = new OkHttpClient();
     }
 
@@ -22,12 +22,11 @@ public class HttpUtils {
                     .headers(headers)
                     .build();
 
-            Response response;
-            response = getOkHttpClient().newCall(request).execute();
+            Response response = getOkHttpClient().newCall(request).execute();
             return response.body().string();
         } catch (IOException e) {
             e.printStackTrace();
-            return "system error";
+            return e.toString();
         }
     }
 
@@ -40,12 +39,12 @@ public class HttpUtils {
                     .post(body)
                     .headers(headers)
                     .build();
-            Response response;
-            response = getOkHttpClient().newCall(request).execute();
+
+            Response response = getOkHttpClient().newCall(request).execute();
             return response.body().string();
         } catch (IOException e) {
             e.printStackTrace();
-            return "system error";
+            return e.toString();
         }
     }
 
@@ -61,12 +60,11 @@ public class HttpUtils {
                     .addHeader("cache-control", "no-cache")
                     .build();
 
-            Response response;
-            response = getOkHttpClient().newCall(request).execute();
+            Response response = getOkHttpClient().newCall(request).execute();
             return response.body().string();
         } catch (IOException e) {
             e.printStackTrace();
-            return "system error";
+            return e.toString();
         }
     }
 
@@ -82,12 +80,11 @@ public class HttpUtils {
                     .addHeader("cache-control", "no-cache")
                     .build();
 
-            Response response;
-            response = getOkHttpClient().newCall(request).execute();
+            Response response = getOkHttpClient().newCall(request).execute();
             return response.body().string();
         } catch (IOException e) {
             e.printStackTrace();
-            return "system error";
+            return e.toString();
         }
     }
 }

@@ -204,11 +204,11 @@ public class BorderCheckUtil {
             returnValue = new PageNoBorderParam(paramPair, key, value);
         } else if (key.equals("page_size")) { //page_size的校验
             returnValue = new PageSizeBorderParam(paramPair, key, value);
-        } else if (patternInteger.matcher(value).matches()) {
+        } else if (patternInteger.matcher(value).matches()) {// 整数类型判断
             returnValue = new IntegerBorderParam(paramPair, key, value);
-        } else if (patternDateYY.matcher(value).matches()) {
+        } else if (patternDateYY.matcher(value).matches()) {// YYYY-MM-DD 类型判断
             returnValue = new DateYYBorderParam(paramPair, key, value);
-        } else if (patternDateHH.matcher(value).matches()) {
+        } else if (patternDateHH.matcher(value).matches()) {// YYYY-MM-DD HH:mm:ss 类型判断
             returnValue = new DateHHBorderParam(paramPair, key, value);
         } else if (value.contains("%7D") || value.contains("}")) { //带}的JSON类型参数校验
             returnValue = new JSONBorderParam(paramPair, key, value);
