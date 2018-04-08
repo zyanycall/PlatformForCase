@@ -24,7 +24,7 @@ public class BorderCheckUtil {
      * 私有的常量
      */
     private final static String PAGE = "page";
-    private final static String SUCCESS_FLAG = "\"code\": \"10000\"";
+    private final static String SUCCESS_FLAG = "\"10000\"";
     private final static int PARAM_TOO_LONG_100 = 100;
     private final static int PARAM_TOO_LONG_300 = 300;
     private final static int PARAM_TOO_LONG_600 = 600;
@@ -51,6 +51,9 @@ public class BorderCheckUtil {
 
     // 用于随机取颜色
     public final static String[] COLORS = {"red", "Blue", "Green"};
+
+    // 执行时间超过0.5秒要标红提示
+    public final static double EXECUTE_TIME_LONG = 0.5;
 
     /**
      * 一键边界测试
@@ -101,17 +104,18 @@ public class BorderCheckUtil {
                     // 替换
                     String bodyinfoFix = "";
                     if (bodyinfo.endsWith(paramPair)) {
-                        bodyinfoFix = bodyinfo.replace( "&" + paramPair, "&" + paramPairFixClear);
+                        bodyinfoFix = bodyinfo.replace("&" + paramPair, "&" + paramPairFixClear);
                     } else {
-                        bodyinfoFix = bodyinfo.replace( paramPair + "&", paramPairFixClear + "&");
+                        bodyinfoFix = bodyinfo.replace(paramPair + "&", paramPairFixClear + "&");
                     }
                     // 输出结果(非Json格式)
-                    String noJsonResult = HttpMethodFactory.getResult(method, url, bodyinfoFix);
+                    String resultAndTime = HttpMethodFactory.getResultWithTime(method, url, bodyinfoFix);
+                    String noJsonResult = HttpMethodFactory.getResultData(resultAndTime);
 
                     String result = toJson(noJsonResult);
-                    if (!result.contains(SUCCESS_FLAG)) {
+                    if (!noJsonResult.contains(SUCCESS_FLAG)) {
                         // 对超长的不得不显示的异常提示的处理
-                        if (result.length() > RESULT_TOO_LONG_2000) {
+                        if (noJsonResult.length() > RESULT_TOO_LONG_2000) {
                             if (tooLongResultMap.containsKey(result)) {
                                 result = "<a href='#" + tooLongResultMap.get(result) + "'>" + tooLongResultMap.get(result) + "</a>";
                             } else {
@@ -121,11 +125,14 @@ public class BorderCheckUtil {
                             }
                         }
                         // 不同错误结果的响应
-                        if (!errorResultList.contains(result)) {
-                            errorResultSb.append(result).append("<br>");
-                            errorResultList.add(result);
+                        if (!errorResultList.contains(noJsonResult)) {
+                            errorResultSb.append(noJsonResult).append("<br>");
+                            errorResultList.add(noJsonResult);
                         }
                     }
+
+                    // 输出执行时间(超过限定时间标红)
+                    resultSb.append(HttpMethodFactory.getResultTime(resultAndTime));
 
                     // 返回给前台时需要解码
                     String keyDecode = URLDecoder.decode(key, "UTF-8");
@@ -246,6 +253,7 @@ public class BorderCheckUtil {
 
     /**
      * 消除自定义的Html格式信息
+     *
      * @param valueBeforeFix
      * @return 无自定义Html格式字符串
      */
@@ -266,6 +274,7 @@ public class BorderCheckUtil {
 
     /**
      * 将数据Json格式化
+     *
      * @param noJsonResult
      * @return json format result
      */
@@ -275,17 +284,30 @@ public class BorderCheckUtil {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             JsonParser jp = new JsonParser();
             result = gson.toJson(jp.parse(noJsonResult));
-        } catch (JsonSyntaxException e){
+        } catch (JsonSyntaxException e) {
             result = noJsonResult;
         }
         return result;
     }
 
+    /**
+     * 返回执行时间，带有HTML标红格式
+     */
+    public static String getExecuteTime(long start) {
+        double executeTime = (System.nanoTime() - start) * 0.000000001;
+        String executeTime4Show = String.format("%.4f", executeTime);
+        if (executeTime > EXECUTE_TIME_LONG) {
+            return "执行时间:" + HTML_POINT_RED + executeTime4Show + "秒" + HTML_POINT_SUFFIX + "<br>";
+        }
+        return "执行时间:" + executeTime4Show + "秒<br>";
+    }
+
     public static void main(String[] args) {
 
-        System.out.println("class_info=[{\"src_class_id\":80349718,\"tar_class_id\":80350002,\"tar_class_room_id\":187202},{\"src_class_id\":80349789,\"tar_class_id\":80350073}]&stu_id=606492200&admin_id=1234444&reason=zyTest001&appkey=om_backend&timestamp=1517797971"
-                .replace("class_info=[{\"src_class_id\":80349718,\"tar_class_id\":80350002,\"tar_class_room_id\":187202},{\"src_class_id\":80349789,\"tar_class_id\":80350073}]&",
-                        "class_info=[{\"src_class_id\":\"80349718.1\",\"tar_class_id\":80350002,\"tar_class_room_id\":187202},{\"src_class_id\":80349789,\"tar_class_id\":80350073}]&"));
+//        System.out.println("class_info=[{\"src_class_id\":80349718,\"tar_class_id\":80350002,\"tar_class_room_id\":187202},{\"src_class_id\":80349789,\"tar_class_id\":80350073}]&stu_id=606492200&admin_id=1234444&reason=zyTest001&appkey=om_backend&timestamp=1517797971"
+//                .replace("class_info=[{\"src_class_id\":80349718,\"tar_class_id\":80350002,\"tar_class_room_id\":187202},{\"src_class_id\":80349789,\"tar_class_id\":80350073}]&",
+//                        "class_info=[{\"src_class_id\":\"80349718.1\",\"tar_class_id\":80350002,\"tar_class_room_id\":187202},{\"src_class_id\":80349789,\"tar_class_id\":80350073}]&"));
+
     }
 
 }

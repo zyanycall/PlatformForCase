@@ -21,9 +21,10 @@
     if (method.endsWith("oneKeyCheck")) {
         out.print(HttpMethodFactory.getResult(method, url, bodyinfo));
     } else {
-        out.print(HttpMethodFactory.getResult(method, url, bodyinfo));
+        String resultWithTime = HttpMethodFactory.getResultWithTime(method, url, bodyinfo);
+        out.print(resultWithTime.replace(HttpMethodFactory.EXECUTE_TIME_SEPARATOR,""));
         out.print("<br><br>格式化：<br>" + BorderCheckUtil.HTML_POINT_GREEN
-                + BorderCheckUtil.toJson(HttpMethodFactory.getResult(method, url, bodyinfo)) + BorderCheckUtil.HTML_RESULT_SUFFIX);
+                + BorderCheckUtil.toJson(HttpMethodFactory.getResultData(resultWithTime)) + BorderCheckUtil.HTML_RESULT_SUFFIX);
     }
 %>
 <%--</PRE>--%>
