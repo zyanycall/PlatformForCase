@@ -27,7 +27,8 @@ public class JSONBorderParam extends BorderParam {
         String valueDecode = value.replaceAll("%5B", "[").replaceAll("%7B", "{")
                 .replaceAll("%3A", ":").replaceAll("%2C", ",")
                 .replaceAll("%7D", "}").replaceAll("%5D", "]")
-                .replaceAll("%22", "\\\"").replaceAll("%27", "'");
+                .replaceAll("%22", "\\\"").replaceAll("%27", "'")
+                .replaceAll("%20","");
 
         if (valueDecode.endsWith("]")) {//这是JSONArray格式，用"]"结尾
             JSONArray jsonArray = JSONArray.fromObject(valueDecode);

@@ -207,9 +207,9 @@ public class BorderCheckUtil {
 
         BorderParam returnValue;
 
-        if (key.equals("page_no")) { //page_no的校验
+        if (key.equalsIgnoreCase("page_no")) { //page_no的校验
             returnValue = new PageNoBorderParam(paramPair, key, value);
-        } else if (key.equals("page_size")) { //page_size的校验
+        } else if (key.equalsIgnoreCase("page_size")) { //page_size的校验
             returnValue = new PageSizeBorderParam(paramPair, key, value);
         } else if (patternInteger.matcher(value).matches()) {// 整数类型判断
             returnValue = new IntegerBorderParam(paramPair, key, value);
@@ -238,7 +238,7 @@ public class BorderCheckUtil {
      * @return value
      */
     public static String getParamValue(String paramPair) {
-        if (HTML_POINT_EMPTY.equals(paramPair)) {// 对key和value都不传的情况做判断
+        if (HTML_POINT_EMPTY.equalsIgnoreCase(paramPair)) {// 对key和value都不传的情况做判断
             return HTML_NO_KEY_NO_VALUE;
         } else if (StringUtils.isEmpty(paramPair)
                 || !paramPair.contains("=")
@@ -285,6 +285,7 @@ public class BorderCheckUtil {
             JsonParser jp = new JsonParser();
             result = gson.toJson(jp.parse(noJsonResult));
         } catch (JsonSyntaxException e) {
+            e.printStackTrace();
             result = noJsonResult;
         }
         return result;
