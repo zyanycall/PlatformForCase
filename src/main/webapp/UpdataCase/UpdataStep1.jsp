@@ -65,13 +65,17 @@
     请选择模块
 </div>
 <div>
-    <input type="button" value="批量运行所选择用例" onclick="testselected_new()">
+    <input type="button" value="批量运行所选择用例" onclick="getcaseids()">
     <input type="button" value="批量删除所选择用例" onclick="deleteselected()">
     <input type="button" value="全选" onclick="selectall()">
     <input type="button" value="取消全选" onclick="unselectall()">
+    <input type="button" value="批量运行输入用例id" onclick="testInput()">
     <input type="button" value="刷新" onclick="refresh()">
 </div>
 <div>
+    输入用例ids，逗号隔开，可以跨模块 ：
+    <input name="ids_input" type="text" id="ids_input" value="" size="85"/>
+    <br>
     如果需要在用例保存之外的环境运行用例，请选择<br>
     已有环境：<SELECT name="ip" id="ip_another">
     <OPTION value="none" selected>&lt;使用用例本身IP地址&gt;</OPTION>
@@ -90,6 +94,8 @@
         JDBCConnectionPool.close(rs2, statement2);
     %>
 </SELECT>
+    或者手动输入IP ： <input name="ip_input" type="text" id="ip_input" value=""/>
+    <br>
     <br>
 </div>
 <form id="try" action="../Tool/Result.jsp" method="post" target="_blank">
@@ -110,7 +116,7 @@
 </div>
 <div id="executePartUrl" style="border:1px solid #000;padding:4px">
     URL：<input type="text" id="executeUrl" name="interface_suff" style="width:1000px;"/>
-<br>
+    <br>
 </div>
 <div id="executePartBodyInfo" style="border:1px solid #000;padding:4px">
     请求内容（如果是get请求可以直接将请求黏贴到这里）<br>
@@ -164,18 +170,21 @@
         var executeContent = "url=" + url + "&bodyinfo=" + encodeURIComponent(bodyInfo) + "&method=" + method;
         xmlhttp.send(executeContent);
     }
+
     function oneKeyCheck() {
-        
+
     }
+
     function sendresult(result) {
         document.getElementById("result_try").value = result;
         document.getElementById("try").submit();
     }
+
     var userid = <%=user_id%>
-    $("#model_name").change(
-        function () {
-            refresh();
-        })
+        $("#model_name").change(
+            function () {
+                refresh();
+            })
 
     $("#prority").change(
         function () {
@@ -214,7 +223,7 @@
     }
 
 
-    function getcaseids_new() {
+    function getcaseids() {
         var chk_value = [];
         var result = "";
         var anotherip = $("#ip_another option:selected").val();
@@ -226,9 +235,14 @@
             alert("您没有选择任何用例");
             return false
         }
+
+        if (document.getElementById("ip_input").value != "") {
+            anotherip = document.getElementById("ip_input").value;
+        }
         $.post("../runmuilttest_new",
             {preids: result, another_ip: anotherip},
             function (data) {
+
                 sendresult(data);
             }
         )
@@ -249,8 +263,27 @@
         }
     }
 
-    function testselected_new() {
-        getcaseids_new();
+    function testInput() {
+        var chk_value = [];
+        var result = "";
+        var anotherip = $("#ip_another option:selected").val();
+        if (document.getElementById("ip_input").value != "") {
+            anotherip = document.getElementById("ip_input").value;
+        }
+        if (document.getElementById("ids_input").value != "") {
+            result = document.getElementById("ids_input").value;
+        } else {
+            alert("您没有选择任何用例");
+            return false
+        }
+        $.post("../runmuilttest_new",
+            {preids: result, another_ip: anotherip},
+            function (data) {
+                sendresult(data);
+            }
+        )
+
+
     }
 
     function sendresult(result) {

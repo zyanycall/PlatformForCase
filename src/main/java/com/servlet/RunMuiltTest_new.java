@@ -1,5 +1,6 @@
 package com.servlet;
 
+import com.borderTest.BorderCheckUtil;
 import com.talk51.Utils.*;
 import net.sf.json.JSONObject;
 import okhttp3.Headers;
@@ -119,9 +120,9 @@ public class RunMuiltTest_new extends HttpServlet {
                     String testscr = rs.getString("scenario");
                     out.println(testscr);
                     out.println("<br>");
-                    out.println("所得结果:<br>");
-                    out.println(actual_result);
-                    out.println("<br>");
+                    out.println("所得结果:<br>" + BorderCheckUtil.HTML_POINT_GREEN);
+                    out.println(BorderCheckUtil.toJson(actual_result));
+                    out.println(BorderCheckUtil.HTML_POINT_SUFFIX + "<br>");
                     out.println("<br>");
                 }
                 actual_result = StringEscapeUtils.escapeSql(actual_result);

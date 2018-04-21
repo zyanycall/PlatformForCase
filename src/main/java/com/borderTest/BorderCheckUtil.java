@@ -40,6 +40,7 @@ public class BorderCheckUtil {
     public final static String HTML_POINT_GREEN = "<span style='white-space: pre-wrap;'><font color='Green'>";
     public final static String HTML_POINT_SUFFIX = "</font></span>";
 
+    // 为了JSON内字符串的替换
     public final static String HTML_POINT_SUFFIX_4JSON = "<\\/font><\\/span>";
 
     // 空字符串的提示
@@ -254,7 +255,7 @@ public class BorderCheckUtil {
     /**
      * 消除自定义的Html格式信息
      *
-     * @param valueBeforeFix
+     * @param valueBeforeFix 修复之前的
      * @return 无自定义Html格式字符串
      */
     public static String clearFixValue(String valueBeforeFix) {
@@ -265,7 +266,7 @@ public class BorderCheckUtil {
                 .replace(HTML_POINT_RED, "")
                 .replace("</font>", "")
                 .replace("</span>", "")
-                // JOSN格式会将\转换成\/，所以多几个步骤
+                // JSON格式会将\转换成\/，所以多几个步骤
                 .replace("<\\/font>", "")
                 .replace("<\\/span>", "")
                 .replace(HTML_EMPTY, "");
@@ -275,7 +276,7 @@ public class BorderCheckUtil {
     /**
      * 将数据Json格式化
      *
-     * @param noJsonResult
+     * @param noJsonResult 无格式字符串
      * @return json format result
      */
     public static String toJson(String noJsonResult) {
