@@ -53,13 +53,14 @@
 <div>
     优先级
     <SELECT name="prority_select" id="prority">
-        <OPTION value="1" selected>1</OPTION>
+        <OPTION value="1,2,3,10" selected>全部</OPTION>
+        <OPTION value="1">1</OPTION>
         <OPTION value="2">2</OPTION>
         <OPTION value="3">3</OPTION>
         <OPTION value="10">10</OPTION>
-        <OPTION value="1,2,3,10">全部</OPTION>
     </SELECT>
-    <input type="button" value="刷新" onclick="refresh()">
+    call_suff like：<input type="text" id="call_suff" name="call_suff" style="width:500px;"/>
+    <input type="button" value="搜索" onclick="refresh()">
 </div>
 <div id="case_list">
     请选择模块
@@ -249,18 +250,26 @@
     }
 
     function refresh() {
+
+        debugger;
+
         var getinfo = $("#model_name option:selected").val();
         var getprority = $("#prority option:selected").val();
+        var call_suff = $("#call_suff").val();
 
-        if (getinfo == "default") {
-            $("#case_list").html("请选择模块");
-        } else {
-            $.post("../GetApiListByModelNameAndUserId",
-                {projectname: getinfo, userid: userid, prority: getprority},
-                function (data) {
+//        if (getinfo == "default") {
+//
+//        } else {
+        $.post("../GetApiListByModelNameAndUserId",
+            {projectname: getinfo, userid: userid, prority: getprority, call_suff: call_suff},
+            function (data) {
+                if (data){
                     $("#case_list").html(data);
-                })
-        }
+                } else {
+                    $("#case_list").html("请选择模块");
+                }
+            })
+//        }
     }
 
     function testInput() {

@@ -1,6 +1,7 @@
 package com.servlet;
 
 import com.talk51.Utils.JDBCConnectionPool;
+import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,6 +32,17 @@ public class GetApiListByModelNameAndUserId extends HttpServlet {
         String userid = request.getParameter("userid");
         String projectname = request.getParameter("projectname");
         String prority = request.getParameter("prority");
+        String callSuff = request.getParameter("call_suff");
+
+        String sql = "SELECT * FROM cases where operator in (" + userid + ",0) and project_name = '" + projectname + "' and is_deleted <> 1 and priority in (" + prority + ")";
+        if (StringUtils.isNotEmpty(callSuff)) {
+            sql = "SELECT * FROM cases where is_deleted <> 1 and call_suff like '%" + callSuff +"%'";
+            if (!"default".equalsIgnoreCase(projectname)) {
+                sql = "SELECT * FROM cases where is_deleted <> 1 and project_name = '" + projectname + "' and call_suff like '%" + callSuff +"%'";
+            }
+        } else if ("default".equalsIgnoreCase(projectname)) {
+            return;
+        }
         PrintWriter out = response.getWriter();
         //out.println("<table border=\"1\" id=\"list_table\"><tr><th>id</th><th>接口名称</th><th>接用例场景描述</th><th>接口请求方法</th><th>接口请求地址ip以及端口</th><th>接口方法名</th><th>接口参数体</th></tr></table>");
         Connection connection = JDBCConnectionPool.getConnection();
@@ -39,22 +51,19 @@ public class GetApiListByModelNameAndUserId extends HttpServlet {
         try {
             statement = connection.createStatement();
             //userID = 0 意味着所有的用户都可以看到并修改
-            String sql = "SELECT * FROM cases where operator in (" + userid + ",0) and project_name = '" + projectname + "' and is_deleted <> 1 and priority in (" + prority + ")";
             rs = statement.executeQuery(sql);
             out.println("<table border=\"1\" id=\"list_t\" style=\"table-layout: fixed;width: 100%;\"> ");
             out.println("<tr>");
-            out.println("<th>用例id</th>");
+            out.println("<th width=\"60px\">用例id</th>");
             out.println("<th>用例接口名称</th>");
             out.println("<th>用例场景描述名称</th>");
-            out.println("<th>用例请求方法</th>");
-            out.println("<th>用例预期结果</th>");
-            out.println("<th>用例实际结果</th>");
+            out.println("<th width=\"60px\">用例请求方法</th>");
             out.println("<th>用例方法名称</th>");
-            out.println("<th>用例优先级</th>");
-            out.println("<th>操作/选择</th>");
+            out.println("<th width=\"60px\">用例优先级</th>");
+            out.println("<th width=\"100px\">操作/选择</th>");
             out.println("</tr>");
             while (rs.next()) {
-                out.println("<tr id=\"row" + rownum + "\">");
+                out.println("<tr id=\"row" + rownum + "\" height=\"50px\">");
                 out.println("<th>");
                 out.println(rs.getString("id"));
                 out.println("</th>");
@@ -67,12 +76,12 @@ public class GetApiListByModelNameAndUserId extends HttpServlet {
                 out.println("<th>");
                 out.println(rs.getString("method"));
                 out.println("</th>");
-                out.println("<th style=\"white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width:20%\">");
-                out.println(rs.getString("expected_result"));
-                out.println("</th>");
-                out.println("<th style=\"white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width:20%\">");
-                out.println(rs.getString("actual_result"));
-                out.println("</th>");
+//                out.println("<th style=\"white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width:20%\">");
+//                out.println(rs.getString("expected_result"));
+//                out.println("</th>");
+//                out.println("<th style=\"white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width:20%\">");
+//                out.println(rs.getString("actual_result"));
+//                out.println("</th>");
                 out.println("<th style=\"word-wrap:break-word\";>");
                 out.println(rs.getString("call_suff"));
                 out.println("</th>");
