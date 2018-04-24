@@ -30,7 +30,7 @@
 
     %>
 </head>
-<body>
+<body onkeydown="enterClick(event.keyCode)">
 <div>
     请选择测试用例所属模块<br>
     选择模块：<br><SELECT name="ModelSelect" id="model_name">
@@ -60,7 +60,7 @@
         <OPTION value="10">10</OPTION>
     </SELECT>
     call_suff like：<input type="text" id="call_suff" name="call_suff" style="width:500px;"/>
-    <input type="button" value="搜索" onclick="refresh()">
+    <input id="refresh_search" type="button" value="搜索" onclick="refresh()">
 </div>
 <div id="case_list">
     请选择模块
@@ -130,8 +130,14 @@
 
 </body>
 <script language=javascript>
-    function executeTest(flag) {
+    function enterClick(keyCode) {
+        if (keyCode == 13) {
+            var btn=document.getElementById('refresh_search');
+            btn.click()
+        }
+    }
 
+    function executeTest(flag) {
         var xmlhttp;
         if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
             xmlhttp = new XMLHttpRequest();
