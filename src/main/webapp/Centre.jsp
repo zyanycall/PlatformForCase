@@ -19,7 +19,6 @@
 欢迎您，名叫<%=session.getAttribute("username")%>的QA或者RD,您的用户ID为<%=session.getAttribute("userid")%>
 您可以进行如下操作：<br>
 <a href="AddCase/Step1.jsp">创建新测试用例</a><br>
-<a href="AddCase/Step1_improve.jsp">创建新测试用例(施工中，闲人免入)</a><br>
 <a id='defaultHref' href="UpdataCase/UpdataStep1.jsp">管理现有测试用例</a><br>
 </body>
 </html>

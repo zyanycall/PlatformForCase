@@ -17,7 +17,6 @@
   </servlet-mapping>
 
   <servlet>
-    <description></description>
     <display-name>runTest</display-name>
     <servlet-name>runTest</servlet-name>
     <servlet-class>com.servlet.RunnerTest</servlet-class>
