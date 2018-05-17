@@ -86,8 +86,10 @@ public class BorderCheckUtil {
         int testCount = 0;
         for (String paramPair : params) {
 
-            // 由于数据比较规整，所以直接split方法，或者每一个参数的键值对
             // 参数值获取
+            if (paramPair.split("=").length < 2) {
+                paramPair = "JsonBodyInfo=" + paramPair;
+            }
             String key = paramPair.split("=")[0];
             String value = getParamValue(paramPair);
             try {
@@ -104,10 +106,14 @@ public class BorderCheckUtil {
                     String paramPairFixClear = clearFixValue(paramPairFix);
                     // 替换
                     String bodyinfoFix = "";
-                    if (bodyinfo.endsWith(paramPair)) {
-                        bodyinfoFix = bodyinfo.replace("&" + paramPair, "&" + paramPairFixClear);
+                    if ("post_Json".equalsIgnoreCase(method)) {
+                        bodyinfoFix = getParamValue(paramPairFixClear);
                     } else {
-                        bodyinfoFix = bodyinfo.replace(paramPair + "&", paramPairFixClear + "&");
+                        if (bodyinfo.endsWith(paramPair)) {
+                            bodyinfoFix = bodyinfo.replace("&" + paramPair, "&" + paramPairFixClear);
+                        } else {
+                            bodyinfoFix = bodyinfo.replace(paramPair + "&", paramPairFixClear + "&");
+                        }
                     }
                     // 输出结果(非Json格式)
                     String resultAndTime = HttpMethodFactory.getResultWithTime(method, url, bodyinfoFix);
@@ -286,7 +292,7 @@ public class BorderCheckUtil {
             JsonParser jp = new JsonParser();
             result = gson.toJson(jp.parse(noJsonResult));
         } catch (JsonSyntaxException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             result = noJsonResult;
         }
         return result;

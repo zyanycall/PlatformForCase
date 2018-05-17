@@ -110,7 +110,7 @@
     请选择目标接口的请求方法<br>
     <input name="method" type="radio" id="method_get" value="get" checked/>Get
     <input name="method" type="radio" id="method_post" value="post"/>Post
-    <input name="method" type="radio" id="method_post_body" value="post_Json"/>Post_Body
+    <input name="method" type="radio" id="method_post_body" value="post_Json"/>Post_Json
     <input name="method" type="radio" id="post_return_json" value="post_return_json"/>Post_Return_Json
     <input name="method" type="radio" id="put" value="put"/>Put
     <input name="method" type="radio" id="delete" value="delete"/>Delete
@@ -172,14 +172,21 @@
 
         }
 
-        xmlhttp.open("POST", "../Tool/RunCaseNow.jsp", true);
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        var executeContent = "url=" + url + "&bodyinfo=" + encodeURIComponent(bodyInfo) + "&method=" + method;
-        xmlhttp.send(executeContent);
-    }
+//        debugger
+//        xmlhttp.open("POST", "../Tool/RunCaseNow.jsp", true);
+//        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//        var executeContent = "bodyinfo=" + encodeURIComponent(bodyInfo) + "&method=" + method + "&url=" + url;
+//        xmlhttp.send(executeContent);
 
-    function oneKeyCheck() {
-
+        $.ajax({
+            type: "POST",
+            url: "../Tool/RunCaseNow.jsp",
+            data: {url:url, bodyinfo:bodyInfo, method:method},
+            success: function (data) {
+                debugger
+                sendresult(data);
+            }
+        });
     }
 
     function sendresult(result) {
@@ -299,11 +306,6 @@
         )
 
 
-    }
-
-    function sendresult(result) {
-        document.getElementById("result_try").value = result;
-        document.getElementById("try").submit();
     }
 
     function selectall() {

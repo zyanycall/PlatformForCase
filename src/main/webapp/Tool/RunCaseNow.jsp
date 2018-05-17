@@ -8,13 +8,13 @@
     request.setCharacterEncoding("UTF-8");
     String url = URLDecoder.decode(request.getParameter("url"), "UTF-8");
     String bodyinfo = request.getParameter("bodyinfo");
-    String DisBody = URLDecoder.decode(bodyinfo, "UTF-8");
+//    String DisBody = URLDecoder.decode(bodyinfo, "UTF-8");
     String method = request.getParameter("method");
 %>
 所请求url和参数：<br>
-<%=url%>?<%=DisBody.replaceAll("&timestamp", "&amp;timestamp")%><br>
+<%=url%>?<%=bodyinfo.replaceAll("&timestamp", "&amp;timestamp")%><br>
 所传参数明细：<br>
-<%=DisBody.replaceAll("&timestamp", "&amp;timestamp")%><br>
+<%=bodyinfo.replaceAll("&timestamp", "&amp;timestamp")%><br>
 运行结果：<%=method%> <br>
 <%--<PRE style="font-size:16px">--%>
 <%
@@ -23,8 +23,10 @@
     } else {
         String resultWithTime = HttpMethodFactory.getResultWithTime(method, url, bodyinfo);
         out.print(resultWithTime.replace(HttpMethodFactory.EXECUTE_TIME_SEPARATOR,""));
+        String result = BorderCheckUtil.toJson(HttpMethodFactory.getResultData(resultWithTime)) == null ? "返回为空":
+                BorderCheckUtil.toJson(HttpMethodFactory.getResultData(resultWithTime));
         out.print("<br><br>格式化：<br>" + BorderCheckUtil.HTML_POINT_GREEN
-                + BorderCheckUtil.toJson(HttpMethodFactory.getResultData(resultWithTime)) + BorderCheckUtil.HTML_RESULT_SUFFIX);
+                + result + BorderCheckUtil.HTML_RESULT_SUFFIX);
     }
 %>
 <%--</PRE>--%>

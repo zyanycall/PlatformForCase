@@ -133,7 +133,7 @@
     <div id="part2" style="border:1px solid #000;padding:4px">
         <p style="letter-spacing:2px">第二步，请输入要添加测试用例的目标接口，如果模块中该存在，也可以直接添加</p><br>
         接口名称：<input type="text" id="interface_name" name="interface_name"/>
-        接口方法：<input type="text" id="interface_suff" name="interface_suff"/>
+        接口方法：<input type="text" id="interface_suff" name="interface_suff" style="width:60%"/>
         <br>已有接口：<br><SELECT name="districtSelect" id="step2Select" onchange="forstep2_full()">
         <OPTION value="" selected>请选择...</OPTION>
     </SELECT><br>
@@ -208,7 +208,8 @@
         }
     </script>
     <div id="part3" style="border:1px solid #000;padding:4px">
-        <p style="letter-spacing:2px">第三步，请修改该接口所需要的参数名，以及参数值，第一个输入框请输入参数名，第二个为参数值。<br>如果参数类型为整形或浮点型，可随机生成，请在第三个框中输入随机整数位数，在第四个框中输入随机小数位数<br>后三个按钮为参数传递概率，第一个按钮为0%，表示该参数必定不传，第二个按钮为50%，表示该参数有50%会不传，第三个为100%，表示该参数必传<br>
+        <p style="letter-spacing:2px">第三步，请修改该接口所需要的参数名，以及参数值，第一个输入框请输入参数名，第二个为参数值。
+            <br>后三个按钮为参数传递概率，第一个按钮为0%，表示该参数必定不传，第三个为100%，表示该参数必传<br>
         </p>
         <input type="button" value="添加新参数" onclick="addParmTeam()"/>
         <input type="button" value="删除一组参数" onclick="deleteParmTeam()"/>
@@ -319,12 +320,14 @@
 
                         var newParmTeam_name = document.createElement("input");
                         newParmTeam_name.type = "text";
+                        newParmTeam_name.style = "width:30%";
                         newParmTeam_name.value = list_name[i];
                         newParmTeam_name.id = "name" + parmblockid;
                         document.getElementById("dynamic parm").appendChild(newParmTeam_name);
 
                         var newParmTeam_value = document.createElement("input");
                         newParmTeam_value.type = "text";
+                        newParmTeam_value.style = "width:50%";
 
                         //对timestamp特殊处理，让其为当前时间。
                         if (list_name[i] == 'timestamp') {
@@ -336,38 +339,12 @@
                         newParmTeam_value.id = "value" + parmblockid;
                         document.getElementById("dynamic parm").appendChild(newParmTeam_value);
 
-                        var newParmTeam_randombtn = document.createElement("input");
-                        newParmTeam_randombtn.type = "button";
-                        newParmTeam_randombtn.value = "随机生成该参数";
-                        newParmTeam_randombtn.onclick = function () {
-                            GetRandomValue(this.id);
-                        };
-                        newParmTeam_randombtn.id = "randombtn" + parmblockid;
-                        document.getElementById("dynamic parm").appendChild(newParmTeam_randombtn);
-
-                        var newParmTeam_intunit = document.createElement("input");
-                        newParmTeam_intunit.type = "text";
-                        newParmTeam_intunit.id = "intunit" + parmblockid;
-                        document.getElementById("dynamic parm").appendChild(newParmTeam_intunit);
-
-                        var newParmTeam_decunit = document.createElement("input");
-                        newParmTeam_decunit.type = "text";
-                        newParmTeam_decunit.id = "decunit" + parmblockid;
-                        document.getElementById("dynamic parm").appendChild(newParmTeam_decunit);
-
                         var newParmTeam_per_0 = document.createElement("input");
                         newParmTeam_per_0.type = "radio";
                         newParmTeam_per_0.name = "parm_per" + parmblockid;
                         newParmTeam_per_0.value = "0";
                         newParmTeam_per_0.id = "parm_per_0_" + parmblockid;
                         document.getElementById("dynamic parm").appendChild(newParmTeam_per_0);
-
-                        var newParmTeam_per_50 = document.createElement("input");
-                        newParmTeam_per_50.type = "radio";
-                        newParmTeam_per_50.name = "parm_per" + parmblockid;
-                        newParmTeam_per_50.value = "1";
-                        newParmTeam_per_50.id = "parm_per_50_" + parmblockid;
-                        document.getElementById("dynamic parm").appendChild(newParmTeam_per_50);
 
                         var newParmTeam_per_100 = document.createElement("input");
                         newParmTeam_per_100.type = "radio";
@@ -388,11 +365,13 @@
 
                     var newParmTeam_name = document.createElement("input");
                     newParmTeam_name.type = "text";
+                    newParmTeam_name.style = "width:30%";
                     newParmTeam_name.id = "name" + parmblockid;
                     document.getElementById("dynamic parm").appendChild(newParmTeam_name);
 
                     var newParmTeam_value = document.createElement("input");
                     newParmTeam_value.type = "text";
+                    newParmTeam_value.style = "width:50%";
                     newParmTeam_value.id = "value" + parmblockid;
                     document.getElementById("dynamic parm").appendChild(newParmTeam_value);
 
@@ -402,32 +381,12 @@
                     newParmTeam_randombtn.onclick = function () {
                         GetRandomValue(this.id);
                     };
-                    newParmTeam_randombtn.id = "randombtn" + parmblockid;
-                    document.getElementById("dynamic parm").appendChild(newParmTeam_randombtn);
-
-                    var newParmTeam_intunit = document.createElement("input");
-                    newParmTeam_intunit.type = "text";
-                    newParmTeam_intunit.id = "intunit" + parmblockid;
-                    document.getElementById("dynamic parm").appendChild(newParmTeam_intunit);
-
-                    var newParmTeam_decunit = document.createElement("input");
-                    newParmTeam_decunit.type = "text";
-                    newParmTeam_decunit.id = "decunit" + parmblockid;
-                    document.getElementById("dynamic parm").appendChild(newParmTeam_decunit);
-
                     var newParmTeam_per_0 = document.createElement("input");
                     newParmTeam_per_0.type = "radio";
                     newParmTeam_per_0.name = "parm_per" + parmblockid;
                     newParmTeam_per_0.value = "0";
                     newParmTeam_per_0.id = "parm_per_0_" + parmblockid;
                     document.getElementById("dynamic parm").appendChild(newParmTeam_per_0);
-
-                    var newParmTeam_per_50 = document.createElement("input");
-                    newParmTeam_per_50.type = "radio";
-                    newParmTeam_per_50.name = "parm_per" + parmblockid;
-                    newParmTeam_per_50.value = "1";
-                    newParmTeam_per_50.id = "parm_per_50_" + parmblockid;
-                    document.getElementById("dynamic parm").appendChild(newParmTeam_per_50);
 
                     var newParmTeam_per_100 = document.createElement("input");
                     newParmTeam_per_100.type = "radio";
@@ -454,20 +413,8 @@
                     var block_value = document.getElementById("value" + parmblockid);
                     block_value.parentNode.removeChild(block_value);
 
-                    var block_button = document.getElementById("randombtn" + parmblockid);
-                    block_button.parentNode.removeChild(block_button);
-
-                    var block_intunit = document.getElementById("intunit" + parmblockid);
-                    block_intunit.parentNode.removeChild(block_intunit);
-
-                    var block_decunit = document.getElementById("decunit" + parmblockid);
-                    block_decunit.parentNode.removeChild(block_decunit);
-
                     var block_parmper0 = document.getElementById("parm_per_0_" + parmblockid);
                     block_parmper0.parentNode.removeChild(block_parmper0);
-
-                    var block_parmper50 = document.getElementById("parm_per_50_" + parmblockid);
-                    block_parmper50.parentNode.removeChild(block_parmper50);
 
                     var block_parmper100 = document.getElementById("parm_per_100_" + parmblockid);
                     block_parmper100.parentNode.removeChild(block_parmper100);

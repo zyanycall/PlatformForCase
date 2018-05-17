@@ -19,7 +19,8 @@ public class HttpMethodFactory {
      */
     public static String getResult(String method, String url, String bodyinfo) {
         String result;
-        Headers headers;
+        Headers headers = Headers.of("User-Agent",
+                "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)");
         switch (method) {
             case "get":
                 headers = Headers.of("User-Agent",
@@ -31,9 +32,9 @@ public class HttpMethodFactory {
                         "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)");
                 result = HttpUtils.sendPost(headers, url, bodyinfo);
                 break;
-            case "post_body":
-                headers = Headers.of("Content-Type", "application/json;charset=utf-8");
-                result = HttpUtils.sendPost(headers, url, bodyinfo);
+            case "post_Json":
+//                headers = Headers.of("Content-Type", "application/json;charset=utf-8");
+                result = HttpUtils.sendPost4JSON(headers, url, bodyinfo);
                 break;
             case "post_return_json":
                 headers = Headers.of("accept", "application/json;charset=utf-8");

@@ -15,5 +15,5 @@
 request.setCharacterEncoding("UTF-8");
 String result=request.getParameter("result");
 %>
-<%=result%>
+<%=result.replaceAll("&timestamp", "&amp;timestamp")%>
 </body>

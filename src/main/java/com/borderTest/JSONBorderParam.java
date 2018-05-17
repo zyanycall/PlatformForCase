@@ -28,7 +28,7 @@ public class JSONBorderParam extends BorderParam {
                 .replaceAll("%3A", ":").replaceAll("%2C", ",")
                 .replaceAll("%7D", "}").replaceAll("%5D", "]")
                 .replaceAll("%22", "\\\"").replaceAll("%27", "'")
-                .replaceAll("%20","");
+                .replaceAll("%20", "");
 
         if (valueDecode.endsWith("]")) {//这是JSONArray格式，用"]"结尾
             JSONArray jsonArray = JSONArray.fromObject(valueDecode);
@@ -50,6 +50,7 @@ public class JSONBorderParam extends BorderParam {
      *
      * @param key     最上层的被参数化的key
      * @param jsonObj 要被改变的JsonObj对象
+     * @param jsonObjReplace 最上层的Json对象，是jsonObj的父级。
      */
     private void dealJsonObj(String key, JSONObject jsonObj, Object jsonObjReplace) {
         // 每个JSONObj都有很多key，再遍历他。
@@ -69,7 +70,11 @@ public class JSONBorderParam extends BorderParam {
                 // JSON格式太长的，增加了标红用于前台展示
                 // 可能存在递归调用，只为非JSON格式数据增加两边的颜色标识
                 String valueFixClear = BorderCheckUtil.getParamValue(paramPairFix);
-                if (valueFixClear.contains("}")) {
+                if (BorderCheckUtil.HTML_NO_KEY_NO_VALUE.equals(valueFixClear)) {
+                    // do nothing
+                    // JSON对象中，某一对key和value都不存在的情况，现有方式不校验。
+                    continue;
+                } else if (valueFixClear.contains("}")) {
                     jsonObj.replace(oneKey, valueFixClear);
                 } else {
                     jsonObj.replace(oneKey, BorderCheckUtil.HTML_POINT_RED +
@@ -82,5 +87,5 @@ public class JSONBorderParam extends BorderParam {
             jsonObj.replace(oneKey, valueOriginal);
         }
     }
-    
+
 }

@@ -53,19 +53,36 @@ public class HttpUtils {
     public static String sendPost(Headers headers, String url, String params) {
         try {
             MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-            RequestBody body = RequestBody.create(mediaType, params);
-            Request request = new Request.Builder()
-                    .url(url)
-                    .post(body)
-                    .headers(headers)
-                    .build();
-
-            Response response = getOkHttpClient().newCall(request).execute();
-            return response.body().string();
+            return getPostRsp(headers, url, params, mediaType);
         } catch (IOException e) {
             e.printStackTrace();
             return e.toString();
         }
+    }
+
+    /**
+     * post_4JSON方法
+     */
+    public static String sendPost4JSON(Headers headers, String url, String params) {
+        try {
+            MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+            return getPostRsp(headers, url, params, mediaType);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return e.toString();
+        }
+    }
+
+    private static String getPostRsp(Headers headers, String url, String params, MediaType mediaType) throws IOException {
+        RequestBody body = RequestBody.create(mediaType, params);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .headers(headers)
+                .build();
+
+        Response response = getOkHttpClient().newCall(request).execute();
+        return response.body().string();
     }
 
     /**
