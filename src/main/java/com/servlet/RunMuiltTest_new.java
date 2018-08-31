@@ -78,40 +78,23 @@ public class RunMuiltTest_new extends HttpServlet {
                     String method = rs.getString("method");
                     out.println(method);
                     out.println("<br>");
+
+                    for (String key : dataparm.keySet()) {
+                        if ("idgenerator".equalsIgnoreCase(dataparm.get(key))) {
+                            dataparm.put(key, GenTool.GetTimeGenId());
+                        }
+                    }
+
                     if (method.equals("get")) {
                         actual_result = GetMethod_Old.sendGet(testurl, dataparm);
                     } else if (method.equals("post")) {
-                        for (String value : dataparm.values()) {
-                            try {
-                                if (dataparm.get("id").equals("idgenerator")) {
-                                    dataparm.put("id", GenTool.GetTimeGenId());
-                                }
-                            } catch (Exception e) {
-                            }
-                        }
                         actual_result = PostMethod_Old.sendPost(testurl, dataparm);
                     } else if (method.equals("post_body")) {
                         Headers headers = Headers.of("Content-Type", "application/json;charset=utf-8");
                         actual_result = HttpUtils.sendPost(headers, testurl, rs.getString("body"));
                     } else if (method.equals("post_return_json")) {
-                        for (String value : dataparm.values()) {
-                            try {
-                                if (dataparm.get("id").equals("idgenerator")) {
-                                    dataparm.put("id", GenTool.GetTimeGenId());
-                                }
-                            } catch (Exception e) {
-                            }
-                        }
                         actual_result = PostMethod_application_json_mulit.sendPost(testurl, dataparm);
                     } else if (method.equals("put")) {
-                        for (String value : dataparm.values()) {
-                            try {
-                                if (dataparm.get("id").equals("idgenerator")) {
-                                    dataparm.put("id", GenTool.GetTimeGenId());
-                                }
-                            } catch (Exception e) {
-                            }
-                        }
                         actual_result = PutMethod_mulit.sendPut(testurl, dataparm);
                     } else if (method.equals("delete")) {
                         actual_result = HttpUtils.sendDelete(testurl, rs.getString("body"));
