@@ -536,7 +536,7 @@ function getTimeGenId()
 	var r_id = (new Date()).valueOf();
 	r_id=r_id.toString();
 	r_id=r_id.substr(r_id.length-8);
-	return r_id;
+	return Math.ceil(Math.random()*10) + r_id;
 }
 
 function doitnow()
@@ -674,7 +674,8 @@ else if(stn5=="post_body")
 	bodyinfo=JSON.stringify(bodyobject);
 	}
     
-	bodyinfo=bodyinfo.replace("idgenerator",getTimeGenId());
+	//bodyinfo=bodyinfo.replace('idgenerator',getTimeGenId());
+    bodyinfo=bodyinfo.split('idgenerator').join(getTimeGenId());
 	alert(getTimeGenId());
 	
     var xmlhttp;

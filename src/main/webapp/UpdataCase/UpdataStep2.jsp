@@ -806,7 +806,7 @@
                     var r_id = (new Date()).valueOf();
                     r_id = r_id.toString();
                     r_id = r_id.substr(r_id.length - 8);
-                    return r_id;
+                    return Math.ceil(Math.random()*10) + r_id;
                 }
 
                 // flag：1 保存修改后自行，0，直接执行，100，一键边界测试
@@ -914,7 +914,8 @@
                         bodyinfo = JSON.stringify(bodyobject);
                     }
 
-                    bodyinfo = bodyinfo.replace("idgenerator", getTimeGenId());
+                    //bodyinfo = bodyinfo.replace('idgenerator', getTimeGenId());
+                    bodyinfo=bodyinfo.split('idgenerator').join(getTimeGenId());
                     //bodyinfo = bodyinfo.replace("*timestamp=(\\d+)&*", (Date.parse(new Date()))/1000)
 
                     var xmlhttp;
