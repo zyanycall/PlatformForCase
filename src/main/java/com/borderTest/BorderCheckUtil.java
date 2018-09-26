@@ -105,7 +105,11 @@ public class BorderCheckUtil {
                         bodyinfoFix = getParamValue(paramPairFixClear);
                     } else {
                         if (bodyinfo.endsWith(paramPair)) {
-                            bodyinfoFix = bodyinfo.replace("&" + paramPair, "&" + paramPairFixClear);
+                            if (bodyinfoFix.contains("&")) {
+                                bodyinfoFix = bodyinfo.replace("&" + paramPair, "&" + paramPairFixClear);
+                            } else {// 对于单个参数不带&符号的处理
+                                bodyinfoFix = bodyinfo.replace(paramPair, paramPairFixClear);
+                            }
                         } else {
                             bodyinfoFix = bodyinfo.replace(paramPair + "&", paramPairFixClear + "&");
                         }
