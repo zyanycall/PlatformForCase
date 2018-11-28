@@ -459,7 +459,7 @@
                         document.getElementById('put').checked = false;
                         document.getElementById('delete').checked = false;
                     }
-                    else if (extinfmethod == "post_body") {
+                    else if (extinfmethod == "post_Json") {
                         document.getElementById('method_get').checked = false;
                         document.getElementById('method_post').checked = false;
                         document.getElementById('method_post_body').checked = true;
@@ -846,7 +846,7 @@
                         stn5 = stn5 + "@oneKeyCheck";
                     }
 
-                    if (stn5 != "post_body") {
+                    if (stn5 != "post_Json") {
                         if (parmblockid) {
                             for (var k = 1; k <= parmblockid; k++) {
                                 var testd = $('input[name="parm_per' + k + '"]:checked').val();
@@ -882,36 +882,38 @@
 
                         bodyinfo = bodyinfo.substring(0, bodyinfo.length - 1);
                     }
-                    else if (stn5 == "post_body" || stn5 == "post_return_json") {
+                    else if (stn5 == "post_Json" || stn5 == "post_return_json") {
                         if (parmblockid) {
-                            for (var k = 1; k <= parmblockid; k++) {
-                                var testd = $('input[name="parm_per' + k + '"]:checked').val();
+                            // for (var k = 1; k <= parmblockid; k++) {
+                            //     var testd = $('input[name="parm_per' + k + '"]:checked').val();
+                            //
+                            //     if (testd == 0) {
+                            //         bodyobject[document.getElementById("name" + k).value] = datatoJson("");
+                            //     }
+                            //     else if (testd == 1) {
+                            //         var random = Math.floor(Math.random() * 2);
+                            //
+                            //         if (random == 0) {
+                            //             bodyobject[document.getElementById("name" + k).value] = datatoJson("");
+                            //         }
+                            //         else if (random == 1) {
+                            //             bodyobject[document.getElementById("name" + k).value] = datatoJson(document.getElementById("value" + k).value);
+                            //             section2parm[document.getElementById("name" + k).value] = bodyinfo + document.getElementById("value" + k).value;
+                            //             section2parm[document.getElementById("name" + k).value] = stringToHex(section2parm[document.getElementById("name" + k).value]);
+                            //             section2parm[document.getElementById("name" + k).value] = encodeURIComponent(section2parm[document.getElementById("name" + k).value]);
+                            //         }
+                            //     }
+                            //     else if (testd == 2) {
+                            // bodyobject[document.getElementById("name" + k).value] = datatoJson(document.getElementById("value" + k).value);
+                            // section2parm[document.getElementById("name" + k).value] = bodyinfo + document.getElementById("value" + k).value;
+                            // section2parm[document.getElementById("name" + k).value] = stringToHex(section2parm[document.getElementById("name" + k).value]);
+                            // section2parm[document.getElementById("name" + k).value] = encodeURIComponent(section2parm[document.getElementById("name" + k).value]);
+                                // }
 
-                                if (testd == 0) {
-                                    bodyobject[document.getElementById("name" + k).value] = datatoJson("");
-                                }
-                                else if (testd == 1) {
-                                    var random = Math.floor(Math.random() * 2);
-
-                                    if (random == 0) {
-                                        bodyobject[document.getElementById("name" + k).value] = datatoJson("");
-                                    }
-                                    else if (random == 1) {
-                                        bodyobject[document.getElementById("name" + k).value] = datatoJson(document.getElementById("value" + k).value);
-                                        section2parm[document.getElementById("name" + k).value] = bodyinfo + document.getElementById("value" + k).value;
-                                        section2parm[document.getElementById("name" + k).value] = stringToHex(section2parm[document.getElementById("name" + k).value]);
-                                        section2parm[document.getElementById("name" + k).value] = encodeURIComponent(section2parm[document.getElementById("name" + k).value]);
-                                    }
-                                }
-                                else if (testd == 2) {
-                                    bodyobject[document.getElementById("name" + k).value] = datatoJson(document.getElementById("value" + k).value);
-                                    section2parm[document.getElementById("name" + k).value] = bodyinfo + document.getElementById("value" + k).value;
-                                    section2parm[document.getElementById("name" + k).value] = stringToHex(section2parm[document.getElementById("name" + k).value]);
-                                    section2parm[document.getElementById("name" + k).value] = encodeURIComponent(section2parm[document.getElementById("name" + k).value]);
-                                }
-                            }
+                            bodyinfo = document.getElementById("value" + 1).value;
+                            // }
                         }
-                        bodyinfo = JSON.stringify(bodyobject);
+                        // bodyinfo = JSON.stringify(bodyobject);
                     }
 
                     //bodyinfo = bodyinfo.replace('idgenerator', getTimeGenId());
