@@ -1,66 +1,55 @@
 package com.test;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
-/**
- * Created by zhaoyu on 2017/6/17.
- */
 public class Happy {
-    public static void main(String args[]) {
-
-        readFileByLines("E:\\jmeter_workspace\\html\\TestReport201709200304_copy.txt");
-
-    }
-
-    /**
-     * 以行为单位读取文件，常用于读面向行的格式化文件
-     */
-    public static void readFileByLines(String fileName) {
-        File file = new File(fileName);
-        BufferedReader reader = null;
-        try {
-            System.out.println("以行为单位读取文件内容，一次读一整行：");
-            reader = new BufferedReader(new FileReader(file));
-            String tempString = null;
-            int line = 1;
-            // 一次读入一行，直到读入null为文件结束
-//            StringBuilder sb = new StringBuilder();
-            String reg = "\"class_id\":\"[0-9]+\"},\"message\":\"success\",\"code\":\"10000\"}";
-            String reg1 = "[0-9]{8}";
-            Pattern p = Pattern.compile(reg);
-            Pattern p1 = Pattern.compile(reg1);
-            while ((tempString = reader.readLine()) != null) {
-                // 显示行号
-//                sb.append(tempString);
-//                System.out.println("line " + line + ": " + tempString);
-                Matcher m = p.matcher(tempString);
-                if(m.find()){
-                    String rawData = m.group(0);
-                    Matcher m1 = p1.matcher(rawData);
-                    if(m1.find()){
-                        String rawData1 = m1.group(0);
-                        System.out.println(rawData1);  // 组提取字符串 0x993902CE
-                    }
+    public static void main(String args[]) throws ParseException {
+        Calendar cal = Calendar.getInstance();
+        String start = "2018-12-01";
+        String end = "2018-12-31";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dBegin = sdf.parse(start);
+        Date dEnd = sdf.parse(end);
+        List<Date> lDate = findDates(dBegin, dEnd);
+        for (Date date : lDate)
+        {
+//            System.out.println(sdf.format(date));
+            Calendar calend = Calendar.getInstance();
+            calend.setTime(date);
+            calend.add(Calendar.DAY_OF_MONTH, 7);
+            List<Date> lllDate = findDates(date, calend.getTime());
+            for (Date date111 : lllDate) {
+                if (sdf.format(date).equals(sdf.format(date111))) {
+                    continue;
                 }
-                line++;
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e1) {
-                }
+                System.out.println(sdf.format(date) + "," + sdf.format(date111));
             }
         }
     }
 
+    public static List<Date> findDates(Date dBegin, Date dEnd)
+    {
+        List lDate = new ArrayList();
+        lDate.add(dBegin);
+        Calendar calBegin = Calendar.getInstance();
+        // 使用给定的 Date 设置此 Calendar 的时间
+        calBegin.setTime(dBegin);
+        Calendar calEnd = Calendar.getInstance();
+        // 使用给定的 Date 设置此 Calendar 的时间
+        calEnd.setTime(dEnd);
+        // 测试此日期是否在指定日期之后
+        while (dEnd.after(calBegin.getTime()))
+        {
+            // 根据日历的规则，为给定的日历字段添加或减去指定的时间量
+            calBegin.add(Calendar.DAY_OF_MONTH, 1);
+            lDate.add(calBegin.getTime());
+        }
+        return lDate;
+    }
 
 }
