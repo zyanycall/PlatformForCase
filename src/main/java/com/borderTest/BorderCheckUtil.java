@@ -131,9 +131,9 @@ public class BorderCheckUtil {
                             }
                         }
                         // 不同错误结果的响应
-                        if (!errorResultList.contains(noJsonResult)) {
+                        if (!errorResultList.contains(getKeyContent(noJsonResult))) {
                             errorResultSb.append(noJsonResult).append("<br>");
-                            errorResultList.add(noJsonResult);
+                            errorResultList.add(getKeyContent(noJsonResult));
                         }
                     }
 
@@ -300,6 +300,26 @@ public class BorderCheckUtil {
     }
 
     /**
+     * 从Json格式的返回值中，提取仅包含code 和 message 的返回值内容，用于比对的key值。
+     * @param noJsonResult
+     * @return
+     */
+    public static String getKeyContent(String noJsonResult){
+        String result;
+        try {
+            JsonParser jp = new JsonParser();
+            JsonElement jsonElement = jp.parse(noJsonResult);
+            String code = String.valueOf(((JsonObject) jsonElement).get("code"));
+            String message = String.valueOf(((JsonObject) jsonElement).get("message"));
+            result = code + message;
+        } catch (JsonSyntaxException e) {
+//            e.printStackTrace();
+            result = noJsonResult;
+        }
+        return result;
+    }
+
+    /**
      * 返回执行时间，带有HTML标红格式
      */
     public static String getExecuteTime(long start) {
@@ -316,6 +336,22 @@ public class BorderCheckUtil {
 //        System.out.println("class_info=[{\"src_class_id\":80349718,\"tar_class_id\":80350002,\"tar_class_room_id\":187202},{\"src_class_id\":80349789,\"tar_class_id\":80350073}]&stu_id=606492200&admin_id=1234444&reason=zyTest001&appkey=om_backend&timestamp=1517797971"
 //                .replace("class_info=[{\"src_class_id\":80349718,\"tar_class_id\":80350002,\"tar_class_room_id\":187202},{\"src_class_id\":80349789,\"tar_class_id\":80350073}]&",
 //                        "class_info=[{\"src_class_id\":\"80349718.1\",\"tar_class_id\":80350002,\"tar_class_room_id\":187202},{\"src_class_id\":80349789,\"tar_class_id\":80350073}]&"));
+
+        String Json = "{\"timestamp\":1547461405660,\"message\":\"相同教材关联下的排序值已存在，不允许重复\",\"trace\":\"e5ef55b69a1e\",\"code\":\"20137\"}";
+        String result;
+        try {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            JsonParser jp = new JsonParser();
+            JsonElement jsonElement = jp.parse(Json);
+//            sort(jsonElement);
+//            result = gson.toJson(jsonElement);
+            ((JsonObject) jsonElement).get("trace");
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            result = Json;
+        }
+        System.out.println();
+
 
     }
 
@@ -365,6 +401,7 @@ public class BorderCheckUtil {
             return;
         }
     }
+
 
 
 }
