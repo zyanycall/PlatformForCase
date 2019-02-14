@@ -10,11 +10,13 @@ import java.util.List;
 public class Happy {
     public static void main(String args[]) throws ParseException {
         Calendar cal = Calendar.getInstance();
-        String start = "2018-12-01";
-        String end = "2018-12-31";
+        String start = "2019-01-01";
+        String end = "2019-01-31";
+        String lineDate = "2019-01-31";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date dBegin = sdf.parse(start);
         Date dEnd = sdf.parse(end);
+        Date dLineDate = sdf.parse(lineDate);
         List<Date> lDate = findDates(dBegin, dEnd);
         for (Date date : lDate)
         {
@@ -25,6 +27,9 @@ public class Happy {
             List<Date> lllDate = findDates(date, calend.getTime());
             for (Date date111 : lllDate) {
                 if (sdf.format(date).equals(sdf.format(date111))) {
+                    continue;
+                }
+                if (date111.after(dLineDate)) {
                     continue;
                 }
                 System.out.println(sdf.format(date) + "," + sdf.format(date111));
