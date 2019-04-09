@@ -14,8 +14,8 @@ public class test2 {
     }
 
     public static void main(String[] args) {
-        double number = 35;
-        int count = 16;
+        double number = 50;
+        int count = 31;
         double lixi = 1.05d;
 
         for (int i = 1 ; i < count; i ++) {

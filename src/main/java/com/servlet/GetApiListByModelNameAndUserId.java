@@ -40,6 +40,7 @@ public class GetApiListByModelNameAndUserId extends HttpServlet {
         } else if ("default".equalsIgnoreCase(projectname)) {
             return;
         }
+        sql = sql + " order by update_time desc";
         PrintWriter out = response.getWriter();
         //out.println("<table border=\"1\" id=\"list_table\"><tr><th>id</th><th>接口名称</th><th>接用例场景描述</th><th>接口请求方法</th><th>接口请求地址ip以及端口</th><th>接口方法名</th><th>接口参数体</th></tr></table>");
         Connection connection = JDBCConnectionPool.getConnection();
